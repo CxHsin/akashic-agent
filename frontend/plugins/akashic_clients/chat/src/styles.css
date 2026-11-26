@@ -3510,3 +3510,4 @@ form.composer:focus-within [data-slot="input-group"] {
 ::highlight(thread-find) { background-color: light-dark(oklch(0.9 0.12 95 / 0.7), oklch(0.62 0.12 85 / 0.45)); color: inherit; }
 ::highlight(thread-find-active) { background-color: light-dark(oklch(0.78 0.16 62), oklch(0.75 0.16 62)); color: oklch(0.2 0 0); }
 @media (prefers-reduced-motion: reduce) { .thread-find__meta-wrap, .thread-find__meta { transition: none; } .thread-find__spin { animation-duration: 2s; } }
+.chat-sidebar__brand-image { width: 20px; height: 20px; border-radius: var(--ak-radius-xs); object-fit: cover; flex: none; }

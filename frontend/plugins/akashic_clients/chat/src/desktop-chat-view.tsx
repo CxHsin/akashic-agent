@@ -1,5 +1,6 @@
+import { subscribeBrand, readBrandName } from "../../../../../packages/akashic-theme/src/appearance-brand";
 import { userInput, type ReplyActivity, type TimelineMessage, type TimelineReply, timelineReplyGroups, timelineText, timelineToolResults, timelineInputStarts, timelineSourceKey, timelineSourceRefreshTokens } from "./message-timeline";
-import React, { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import React, { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
 import { useStickToBottomContext } from "use-stick-to-bottom";
 import { MaterialButton } from "../../../../../packages/akashic-theme/src/material-react";
 import {
@@ -121,8 +122,9 @@ export function DesktopChatView({ controller }: DesktopChatViewProps) {
     composerApi.current?.focus();
   }, [handleReplyMessage]);
   // 侧栏顶部目的地指向的对话以目的地的名字为标题（例如 Akashic），不再显示自动生成的会话标题。
+  const brandName = useSyncExternalStore(subscribeBrand, readBrandName);
   const destinationLabel = activeSessionId && controller.destination.value?.sessionId === activeSessionId
-    ? controller.destination.value.label : undefined;
+    ? (controller.destination.value.label === "Akashic" ? brandName : controller.destination.value.label) : undefined;
   const activeTitle = destinationLabel ?? (sidebarSessions.find((session) => session.active)?.title || "新会话");
   const activeGroup = navigationGroups.active;
   const headingTitle = activeGroup ? `${activeGroup.label} / ${activeTitle}` : activeTitle;
@@ -472,11 +474,12 @@ function useDocumentTitle(title: string, generating: boolean): void {
     wasGenerating.current = generating;
     const apply = () => {
       if (!document.hidden) unseen.current = false;
-      document.title = `${unseen.current ? "● " : ""}${title ? `${title} · ` : ""}Akashic`;
+      document.title = `${unseen.current ? "● " : ""}${title ? `${title} · ` : ""}${readBrandName()}`;
     };
     apply();
     document.addEventListener("visibilitychange", apply);
-    return () => document.removeEventListener("visibilitychange", apply);
+    const unsubscribe = subscribeBrand(apply);
+    return () => { document.removeEventListener("visibilitychange", apply); unsubscribe(); };
   }, [title, generating]);
 }
 

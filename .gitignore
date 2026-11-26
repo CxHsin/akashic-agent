@@ -67,6 +67,8 @@ plugins/**/.data/
 !/docs/refactor/**
 !/docs/templates/
 !/docs/templates/**
+!/docs/custom/
+!/docs/custom/**
 !/docs/spark/
 !/docs/spark/**
 /.pytest_artifacts/

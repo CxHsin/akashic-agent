@@ -1,3 +1,4 @@
+import { readBrandName, readBrandIcon, subscribeBrand } from "../../../../../packages/akashic-theme/src/appearance-brand";
 import {
   MessageSquarePlus,
   Search,
@@ -8,7 +9,7 @@ import {
   Keyboard,
   X,
 } from "lucide-react";
-import { memo, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, type RefObject } from "react";
+import { memo, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, useSyncExternalStore, type RefObject } from "react";
 import {
   DropdownMenu, DropdownMenuContent, DropdownMenuRadioGroup,
   DropdownMenuRadioItem, DropdownMenuTrigger,
@@ -392,6 +393,8 @@ export const DesktopSidebar = memo(function DesktopSidebar({
   onRailAction,
   rail,
 }: DesktopSidebarProps) {
+  const brandName = useSyncExternalStore(subscribeBrand, readBrandName);
+  const brandIcon = useSyncExternalStore(subscribeBrand, readBrandIcon);
   const [query, setQuery] = useState("");
   // 目的地指向的会话只在顶上出现：不进置顶、分组与最近会话。
   const destinationId = destination?.value?.sessionId;
@@ -679,15 +682,15 @@ export const DesktopSidebar = memo(function DesktopSidebar({
     <aside ref={sidebarRef} className="chat-sidebar chat-sidebar--entry">
       <div className="chat-sidebar__toolbar">
         {destination?.value ? <div className="chat-sidebar__brand-row chat-sidebar__brand-row--destination">
-          <IdentityDestinationRow destination={destination.value} mark={brandMask} status={destinationRow?.status}
+          <IdentityDestinationRow destination={destination.value} mark={brandMask} brandIcon={brandIcon} status={destinationRow?.status}
             updatedAt={destinationRow?.updatedAt} active={Boolean(destinationId) && activeSessionId === destinationId}
             actions={(destination.source?.provider.actions ?? []).map(({ label, form }) => ({
               label, icon: <ArrowUpToLine size={18} aria-hidden="true" />, onSelect: () => openDestinationForm(form) }))}
             onOpen={() => destinationId ? onSelectSession(destinationId) : destination.open()} />
         </div> : <div className="chat-sidebar__brand-row">
           <span className="chat-sidebar__brand">
-            <span className="chat-sidebar__mark" style={brandMask} aria-hidden="true" />
-            <strong>Akashic</strong>
+            {brandIcon ? <img className="chat-sidebar__brand-image" src={brandIcon} alt="" /> : <span className="chat-sidebar__mark" style={brandMask} aria-hidden="true" />}
+            <strong>{brandName}</strong>
           </span>
           {brandActions}
         </div>}

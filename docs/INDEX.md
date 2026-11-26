@@ -17,6 +17,8 @@
 
 ## 2. 文档各自回答什么
 
+个人 fork 的定位、二开特性与分支同步约定见 [custom 维护入口](custom/README.md)。
+
 | 入口 | 用途 |
 |---|---|
 | [projectneed.md](projectneed.md) | 设计原则、长期需求和禁止事项 |

@@ -7,6 +7,28 @@
   <meta name="color-scheme" content="light">
   <title>Akashic Dashboard</title>
   <script>
+    // Apply the last successful instance appearance before the first paint.
+    try {
+      const cached = JSON.parse(localStorage.getItem("akashic_appearance_cache") || "null");
+      if (cached) {
+        for (const role of ["reading", "ui", "technical"]) {
+          const key = "--ak-type-" + role;
+          const value = cached.values?.[key];
+          if (typeof value === "string" && value) document.documentElement.style.setProperty(key, value);
+        }
+        document.documentElement.dataset.akBrandName = cached.brandName || "Akashic";
+        document.documentElement.dataset.akBrandIcon = cached.sidebarIcon || "";
+        document.title = (cached.brandName || "Akashic") + " Dashboard";
+        const icon = document.querySelector('link[rel="icon"]');
+        if (icon && typeof cached.iconHref === "string") { icon.removeAttribute("type"); icon.href = cached.iconHref; }
+        const style = document.createElement("style");
+        style.id = "akashic-custom-fonts";
+        style.textContent = typeof cached.faces === "string" ? cached.faces : "";
+        document.head.append(style);
+      }
+    } catch {}
+  </script>
+  <script>
     // bootstrap 预热：HTML 解析到这里就发请求，与整个模块图的下载求值并行，不再等
     // dashboard 入口 eval 完才发起（慢链路下省一个多 RTT 的串行段）。消费方是
     // startWebHost（frontend/plugins/ui/dashboard/src/webHost.ts），一次性取用后即删除钩子，

@@ -985,3 +985,219 @@
     padding: 0 12px;
   }
 }
+
+.shell-appearance {
+  display: grid;
+  gap: 20px;
+  max-width: 860px;
+  font-family: var(--ak-type-ui);
+}
+.shell-appearance-group { min-width: 0; }
+.shell-appearance-group h4 {
+  margin: 0 0 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ak-ink-secondary);
+}
+.shell-appearance-card {
+  overflow: hidden;
+  border: 1px solid var(--ak-rule-subtle);
+  border-radius: var(--ak-radius-md);
+  background: var(--ak-paper-sheet);
+}
+.shell-appearance-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px 16px;
+  min-width: 0;
+}
+.shell-appearance-card > * + *,
+.shell-appearance-font-list > * + * { border-block-start: 1px solid var(--ak-rule-subtle); }
+.shell-appearance-copy { min-width: 0; }
+.shell-appearance-copy > label,
+.shell-appearance-copy > strong {
+  display: block;
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 500;
+  color: var(--ak-ink-primary);
+  overflow-wrap: anywhere;
+}
+.shell-appearance-copy p {
+  margin: 4px 0 0;
+  color: var(--ak-ink-muted);
+  font-size: 12px;
+  line-height: 18px;
+}
+.shell-appearance-controls {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  flex: 0 1 auto;
+  min-width: 0;
+}
+.shell-appearance input:not([type="file"]),
+.shell-appearance select {
+  box-sizing: border-box;
+  width: 220px;
+  max-width: 100%;
+  min-width: 0;
+  height: 34px;
+  padding: 0 10px;
+  border: 1px solid var(--ak-rule-default);
+  border-radius: var(--ak-radius-sm);
+  background: var(--ak-paper-sheet);
+  color: var(--ak-ink-primary);
+  font: inherit;
+  font-size: 13px;
+}
+.shell-appearance input:not([type="file"]) { max-width: 240px; }
+.shell-appearance input::placeholder { color: var(--ak-ink-muted); }
+.shell-appearance select {
+  appearance: none;
+  padding-inline-end: 30px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='m3 4.5 3 3 3-3' fill='none' stroke='%23888' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-position: right 10px center;
+  background-repeat: no-repeat;
+}
+.shell-appearance button { font-family: inherit; cursor: pointer; }
+.shell-appearance-secondary,
+.shell-appearance-primary,
+.shell-appearance-text {
+  flex-shrink: 0;
+  min-height: 34px;
+  padding: 0 12px;
+  border: 1px solid var(--ak-rule-default);
+  border-radius: var(--ak-radius-sm);
+  background: var(--ak-paper-sheet);
+  color: var(--ak-ink-secondary);
+  font-size: 12px;
+}
+.shell-appearance-primary {
+  border-color: transparent;
+  border-radius: var(--ak-radius-sm);
+  background: var(--ak-color-action-primary);
+  color: var(--ak-color-on-action-primary);
+}
+.shell-appearance-text { border-color: transparent; background: transparent; padding-inline: 6px; }
+.shell-appearance-secondary:hover:not(:disabled),
+.shell-appearance-text:hover:not(:disabled) {
+  background: color-mix(in oklab, var(--ak-ink-primary) 4%, transparent);
+  color: var(--ak-ink-primary);
+}
+.shell-appearance-primary:hover:not(:disabled) { filter: brightness(.94); }
+.shell-appearance-delete:hover:not(:disabled) { color: var(--ak-color-status-error); }
+.shell-appearance :is(button, input, select):focus-visible {
+  outline: 2px solid var(--ak-rule-focus);
+  outline-offset: 2px;
+}
+.shell-appearance :disabled { opacity: .5; cursor: not-allowed; }
+.shell-appearance-icon-row { align-items: flex-start; }
+.shell-appearance-icon-picker { display: grid; flex: 0 0 auto; max-width: 100%; justify-items: end; gap: 6px; }
+.shell-appearance-icons { display: flex; flex-wrap: wrap; gap: 8px; justify-content: flex-end; max-width: 392px; }
+.shell-appearance-icons button {
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 6px;
+  width: 72px;
+  height: 72px;
+  padding: 6px;
+  border: 1px solid var(--ak-rule-subtle);
+  border-radius: var(--ak-radius-sm);
+  background: transparent;
+  color: var(--ak-ink-secondary);
+  font-size: 11px;
+}
+.shell-appearance-icons button:hover:not(:disabled) { background: color-mix(in oklab, var(--ak-ink-primary) 4%, transparent); }
+.shell-appearance-icons button[aria-pressed="true"] {
+  border-color: var(--ak-rule-focus);
+  background: color-mix(in oklab, var(--ak-ink-primary) 6%, transparent);
+  color: var(--ak-ink-primary);
+}
+.shell-appearance-icons img { width: 28px; height: 28px; object-fit: contain; }
+.shell-appearance-plus { height: 28px; line-height: 28px; font-size: 24px; font-weight: 300; }
+.shell-appearance-brand {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px 20px;
+  padding: 12px 16px;
+  background: var(--ak-paper-quiet);
+  color: var(--ak-ink-secondary);
+  font-size: 12px;
+}
+.shell-appearance-preview-label { color: var(--ak-ink-muted); font-size: 11px; }
+.shell-appearance-topbar, .shell-appearance-tab { display: inline-flex; align-items: center; gap: 8px; min-width: 0; }
+.shell-appearance-topbar strong { font-weight: 500; overflow-wrap: anywhere; }
+.shell-appearance-topbar img { width: 22px; height: 22px; object-fit: contain; }
+.shell-appearance-tab {
+  max-width: 100%;
+  padding: 6px 10px;
+  border: 1px solid var(--ak-rule-subtle);
+  border-radius: var(--ak-radius-sm);
+  background: var(--ak-paper-sheet);
+}
+.shell-appearance-tab img { width: 14px; height: 14px; object-fit: contain; }
+.shell-appearance-tab span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.shell-appearance-preview { display: grid; gap: 12px; padding: 16px; background: var(--ak-paper-quiet); }
+.shell-appearance-preview > div { display: grid; grid-template-columns: 28px minmax(0, 1fr); align-items: baseline; gap: 14px; }
+.shell-appearance-preview > div > span { font-size: 11px; color: var(--ak-ink-muted); }
+.shell-appearance-preview p, .shell-appearance-preview code { margin: 0; color: var(--ak-ink-secondary); font-size: 13px; line-height: 1.8; overflow-wrap: anywhere; }
+.shell-appearance-ui { font-family: var(--ak-type-ui); }
+.shell-appearance-reading { font-family: var(--ak-type-reading); }
+.shell-appearance-preview code { font-family: var(--ak-type-technical); }
+.shell-appearance-font-list { margin: 0; padding: 0; list-style: none; }
+.shell-appearance-empty { margin: 0; padding: 16px; font-size: 12px; line-height: 20px; color: var(--ak-ink-muted); }
+.shell-appearance-error {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 0;
+  padding: 12px 16px;
+  border: 1px solid color-mix(in oklab, var(--ak-color-status-error) 34%, var(--ak-rule-subtle));
+  border-radius: var(--ak-radius-sm);
+  background: color-mix(in oklab, var(--ak-color-status-error) 6%, var(--ak-paper-sheet));
+  color: var(--ak-color-status-error);
+  font-size: 13px;
+  line-height: 20px;
+}
+.shell-appearance-status { margin: 0; color: var(--ak-ink-muted); font-size: 12px; }
+.shell-appearance-status:empty { display: none; }
+@media (max-width: 639px) {
+  .shell-appearance-row { flex-wrap: wrap; gap: 12px; }
+  .shell-appearance-controls { width: 100%; justify-content: flex-start; }
+  .shell-appearance-controls input { flex: 1; }
+  .shell-appearance-icon-picker { width: 100%; justify-items: start; }
+  .shell-appearance-icons { justify-content: flex-start; }
+  .shell-appearance-font-list .shell-appearance-row { flex-wrap: nowrap; }
+}
+
+.shell-appearance-custom-icon { position: relative; width: 72px; height: 72px; flex: none; }
+.shell-appearance-icons .shell-appearance-icon-delete {
+  position: absolute;
+  inset-block-start: 3px;
+  inset-inline-end: 3px;
+  display: grid;
+  place-content: center;
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--ak-radius-xs);
+  background: var(--ak-paper-sheet);
+  color: var(--ak-ink-muted);
+  font-size: 16px;
+  line-height: 1;
+}
+.shell-appearance-icons .shell-appearance-icon-delete:hover:not(:disabled) { color: var(--ak-color-status-error); }
+.shell-appearance-icons .shell-appearance-custom-image,
+.shell-appearance-brand[data-custom-icon] img,
+.product-band__brand img[data-custom-icon] {
+  border-radius: var(--ak-radius-xs);
+  object-fit: cover;
+}
