@@ -6,7 +6,7 @@
 
 第一版外观定制基于上游 [kachofugetsu09/akashic-agent](https://github.com/kachofugetsu09/akashic-agent) 的提交 [`6c4273b9baed25ccc0ada8fffa93d18b6875ba73`](https://github.com/kachofugetsu09/akashic-agent/commit/6c4273b9baed25ccc0ada8fffa93d18b6875ba73)（`docs: 最小包管理器设计（Phase 1） (#2166)`）。此处记录实际采用的代码基线；本地 `upstream/main` 引用可能更新或落后，不作为版本依据。
 
-当前第一版在 `feat/appearance-customization` 收口。确认、提交并验收后，该功能分支的提交将作为 `custom` 的初始基线；当前尚未发布。
+第一版外观定制由 [PR #1](https://github.com/CxHsin/akashic-agent/pull/1) 从 `feat/appearance-customization` 集成到 `custom`，保留首张完整二开 PR 记录；本仓库不提供通用发行版。
 
 ## 已落地特性
 
@@ -53,3 +53,11 @@ Python 检查在具备依赖的项目虚拟环境中运行。默认 pyright 范�
 外观 API 集成验证：`python -m pytest -q tests/test_shell_appearance.py`；品牌行的真实 React 组件集成验证：`node tests/test_destination_brand.mjs`。API 验证仅写入临时目录，组件验证使用 JSDOM，不代表真实浏览器视觉验收。
 
 展示材料随 PR 保留问题说明、关键取舍、实际验证结果及截图。未完成的浏览器、重启或部署验收应明确标出；本维护入口不重复保存检查流水账。
+
+## 第一版浏览器验收画面
+
+Ego Lite 中将真实外观设置组件连接到真实 FastAPI HTTP API，全部状态写入隔离临时目录。已操作改名、切换正文字体、上传 SVG 图标及刷新读回；1280 px 和 390 px 宽度均未观察到横向溢出。
+
+由于当前 Ego Lite 的 `Page.captureScreenshot` 超时，下图使用同一页面的原生打印渲染（模拟 screen 媒体，保留背景）导出 PDF 后转 PNG，属于浏览器渲染画面，不是原始视口截图。验证对象是组件与 API 的集成，不代表完整 Shell、聊天、实例重启或正式部署验收。
+
+[桌面画面](evidence/appearance-desktop.png) · [窄屏画面](evidence/appearance-narrow.png)
