@@ -1,3 +1,5 @@
+本 fork 用于个人日常使用与求职展示，二开特性和维护约定见 [custom 维护入口](./docs/custom/README.md)。
+
 [![欢迎加入交流群](https://img.shields.io/badge/QQ%E4%BA%A4%E6%B5%81%E7%BE%A4-%E6%AC%A2%E8%BF%8E%E5%8A%A0%E5%85%A5-2ea44f?style=for-the-badge)](./COMMUNICATION.md)
 
 # Akashic Agent

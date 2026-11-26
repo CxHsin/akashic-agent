@@ -1,4 +1,5 @@
-import { useCallback, useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
+import { readBrandName, subscribeBrand } from "../../../../../packages/akashic-theme/src/appearance-brand";
+import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore, type CSSProperties } from "react";
 import type { DestinationControls, DestinationForm, NavigationDestination } from "@akashic/chat-ui-v1";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { DestinationMount, destinationsPending, identityDestinationSource, type DestinationSource } from "./plugin-ui-runtime";
@@ -101,25 +102,28 @@ export function contactTime(iso: string | undefined, now = new Date()): string {
 }
 
 /** 品牌行变成的联系人行：头像、名字、时间或状态、最近一句；菜单与会话行同一套。 */
-export function IdentityDestinationRow({ destination, mark, status, updatedAt, active, actions, onOpen }: {
+export function IdentityDestinationRow({ destination, mark, brandIcon, status, updatedAt, active, actions, onOpen }: {
   destination: NavigationDestination;
   mark: CSSProperties;
+  brandIcon?: string;
   status?: SessionStatus;
   updatedAt?: string;
   active: boolean;
   actions: NavigationRowAction[];
   onOpen(): void;
 }) {
+  const brandName = useSyncExternalStore(subscribeBrand, readBrandName);
+  const label = destination.label === "Akashic" ? brandName : destination.label;
   const time = destination.sessionId ? contactTime(updatedAt) : "";
   // 预览取自最近一条消息的原文：去掉 Markdown 标记再显示，星号、井号不占这一行。
   const preview = useMemo(() => destination.preview ? markdownPlainText(destination.preview) : destination.hint || "", [destination.preview, destination.hint]);
-  return <NavigationRowMenu title={destination.label} actions={actions} className="destination-row">
+  return <NavigationRowMenu title={label} actions={actions} className="destination-row">
     <button type="button" className="destination-row__open" data-active={active || undefined}
       aria-current={active ? "page" : undefined} data-unread={status === "unread" || undefined} onClick={onOpen}>
-      <span className="destination-row__avatar" aria-hidden="true"><span className="chat-sidebar__mark" style={mark} /></span>
+      <span className="destination-row__avatar" aria-hidden="true">{brandIcon ? <img className="chat-sidebar__brand-image" src={brandIcon} alt="" /> : <span className="chat-sidebar__mark" style={mark} />}</span>
       <span className="destination-row__copy">
         <span className="destination-row__name">
-          <strong>{destination.label}</strong>
+          <strong>{label}</strong>
           {status ? <SessionStatusMark status={status} /> : time ? <time dateTime={updatedAt}>{time}</time> : null}
         </span>
         {preview ? <span className="destination-row__preview">{preview}</span> : null}

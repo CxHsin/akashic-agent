@@ -1,7 +1,7 @@
-import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, type KeyboardEvent } from "react";
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, useSyncExternalStore, type KeyboardEvent } from "react";
 import { createRoot } from "react-dom/client";
 import "./style.css";
-import { akashicBrandIcon, markup } from "./brand";
+import { markup } from "./brand";
 import { PluginInventory, inventoryResource, type InventoryResource } from "./plugin-inventory";
 import { SystemVersion } from "./system-version";
 import type {
@@ -16,6 +16,9 @@ import type {
   ShellSettingsPlugin,
   ShellSettingsSection,
 } from "@akashic/shell-ui-v1";
+
+import { AppearanceSettings, createAppearance, type AppearanceState } from "./appearance";
+import { appearanceIcon } from "../../../../packages/akashic-theme/src/appearance-presets";
 
 type ShellPage = WebEntry & {
   label: string;
@@ -106,6 +109,8 @@ const settingsLauncher = { open: () => {} };
 /** Register the ordinary Shell plugin as the only owner of the outer frame. */
 export function activate(ctx: WebHostContextV1): WebUiDisposer {
   const inventory = inventoryResource(ctx);
+  const appearance = createAppearance(ctx.http);
+  void appearance.request().catch((error: unknown) => console.warn("外观配置读取失败", error));
   const disposers = [
     ctx.ui.inject("web.root.v1", (mount) => mount.register({
       id: "shell",
@@ -124,7 +129,15 @@ export function activate(ctx: WebHostContextV1): WebUiDisposer {
           settingsPlugins={view.child(SETTINGS_PLUGINS_MOUNT)}
           http={ctx.http}
           inventory={inventory}
+          appearance={appearance}
         />);
+        return () => root.unmount();
+      },
+    })),
+    ctx.ui.inject(SETTINGS_MOUNT, (mount) => mount.register({
+      id: "shell.appearance", order: 20, label: "外观", route: "appearance", iconSvg: SETTINGS_ICON,
+      render(host) {
+        const root = createRoot(host); root.render(<AppearanceSettings state={appearance} />);
         return () => root.unmount();
       },
     })),
@@ -141,14 +154,17 @@ export function activate(ctx: WebHostContextV1): WebUiDisposer {
   };
 }
 
-function Shell({ pages, railActions, settings, settingsPlugins, http, inventory }: {
+function Shell({ pages, railActions, settings, settingsPlugins, http, inventory, appearance }: {
   pages: WebMountView;
   railActions: WebMountView;
   settings: WebMountView;
   settingsPlugins: WebMountView;
   http: WebHostContextV1["http"];
   inventory: InventoryResource;
+  appearance: AppearanceState;
 }): React.ReactElement {
+  const appearanceConfig = useSyncExternalStore(appearance.subscribe, appearance.get);
+  const brandName = appearanceConfig.brand.name || "Akashic";
   const bandEntries = useMemo(() => checkPages(pages.entries), [pages.entries]);
   const railActionEntries = useMemo(() => checkRailActions(railActions.entries), [railActions.entries]);
   const sectionEntries = useMemo(() => checkSettingsSections(settings.entries), [settings.entries]);
@@ -559,10 +575,10 @@ function Shell({ pages, railActions, settings, settingsPlugins, http, inventory 
         <span aria-hidden="true" dangerouslySetInnerHTML={markup(CLOSE_ICON)} />
       </button>
     </div>}
-    {showBand && <header className="product-band" aria-label="Akashic 主导航">
-      <div className="product-band__brand" title="Akashic">
-        <img src={akashicBrandIcon} alt="" />
-        <strong>Akashic</strong>
+    {showBand && <header className="product-band" aria-label={`${brandName} 主导航`}>
+      <div className="product-band__brand" title={brandName}>
+        <img src={appearanceIcon(appearanceConfig)} data-custom-icon={appearanceConfig.brand.icon_mode === "custom" || undefined} alt="" />
+        <strong>{brandName}</strong>
       </div>
       <nav
         className="product-band__nav"
@@ -704,7 +720,7 @@ function SettingsHeading({ target, sections, card, back }: {
   if (!target) return null;
   if (target.kind === "section") {
     const entry = sections.find((item) => item.id === target.id);
-    return <header className="shell-settings-heading"><h3>{entry?.label}</h3></header>;
+    return <header className="shell-settings-heading"><h3>{entry?.label}</h3>{entry?.id === "shell.appearance" && <p>自定义品牌与字体。设置保存在当前实例，保存成功后立即应用。</p>}</header>;
   }
   if (target.kind === "version") {
     return <header className="shell-settings-heading"><h3>{SETTINGS_VERSION_LABEL}</h3></header>;

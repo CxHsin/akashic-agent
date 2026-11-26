@@ -6,7 +6,7 @@ const MODULES = [
   {
     pluginId: "shell-ui",
     directory: "shell_ui",
-    requires: ["web.root.v1", "shell.rail-actions.v1"],
+    requires: ["web.root.v1", "shell.rail-actions.v1", "shell.settings.v1"],
     provides: ["shell.pages.v1", "shell.rail-actions.v1", "shell.settings.v1", "shell.settings-plugins.v1"],
     contractDigests: {
       "shell.rail-actions.v1": "911133603ab7d50f616775e0352f90506345d61ee12d1865a63d18a656bb045c",
