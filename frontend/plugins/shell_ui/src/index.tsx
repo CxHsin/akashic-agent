@@ -109,9 +109,10 @@ const settingsLauncher = { open: () => {} };
 /** Register the ordinary Shell plugin as the only owner of the outer frame. */
 export function activate(ctx: WebHostContextV1): WebUiDisposer {
   const inventory = inventoryResource(ctx);
-  const appearance = createAppearance(ctx.http);
+  const appearance = createAppearance(ctx);
   void appearance.request().catch((error: unknown) => console.warn("外观配置读取失败", error));
   const disposers = [
+    appearance.dispose,
     ctx.ui.inject("web.root.v1", (mount) => mount.register({
       id: "shell",
       children: [
@@ -720,7 +721,7 @@ function SettingsHeading({ target, sections, card, back }: {
   if (!target) return null;
   if (target.kind === "section") {
     const entry = sections.find((item) => item.id === target.id);
-    return <header className="shell-settings-heading"><h3>{entry?.label}</h3>{entry?.id === "shell.appearance" && <p>自定义品牌与字体。设置保存在当前实例，保存成功后立即应用。</p>}</header>;
+    return <header className="shell-settings-heading"><h3>{entry?.label}</h3></header>;
   }
   if (target.kind === "version") {
     return <header className="shell-settings-heading"><h3>{SETTINGS_VERSION_LABEL}</h3></header>;

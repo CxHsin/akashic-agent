@@ -993,6 +993,7 @@
   font-family: var(--ak-type-ui);
 }
 .shell-appearance-group { min-width: 0; }
+.shell-appearance-description { margin: 0; color: var(--ak-ink-muted); font-size: 13px; line-height: 1.6; }
 .shell-appearance-group h4 {
   margin: 0 0 8px;
   font-size: 13px;
@@ -1059,9 +1060,19 @@
 .shell-appearance select {
   appearance: none;
   padding-inline-end: 30px;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='m3 4.5 3 3 3-3' fill='none' stroke='%23888' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
-  background-position: right 10px center;
-  background-repeat: no-repeat;
+}
+.shell-appearance-select { position: relative; display: inline-flex; max-width: 100%; min-width: 0; }
+.shell-appearance-select::after {
+  content: "";
+  position: absolute;
+  inset-inline-end: 12px;
+  top: calc(50% - 4px);
+  width: 6px;
+  height: 6px;
+  border-inline-end: 1px solid var(--ak-ink-muted);
+  border-block-end: 1px solid var(--ak-ink-muted);
+  transform: rotate(45deg);
+  pointer-events: none;
 }
 .shell-appearance button { font-family: inherit; cursor: pointer; }
 .shell-appearance-secondary,
@@ -1180,21 +1191,40 @@
 .shell-appearance-custom-icon { position: relative; width: 72px; height: 72px; flex: none; }
 .shell-appearance-icons .shell-appearance-icon-delete {
   position: absolute;
-  inset-block-start: 3px;
-  inset-inline-end: 3px;
+  inset-block-start: -7px;
+  inset-inline-end: -7px;
   display: grid;
   place-content: center;
-  width: 20px;
-  height: 20px;
+  width: 40px;
+  height: 40px;
   padding: 0;
   border: 0;
-  border-radius: var(--ak-radius-xs);
-  background: var(--ak-paper-sheet);
+  background: transparent;
   color: var(--ak-ink-muted);
   font-size: 16px;
   line-height: 1;
 }
-.shell-appearance-icons .shell-appearance-icon-delete:hover:not(:disabled) { color: var(--ak-color-status-error); }
+.shell-appearance-icon-delete > span {
+  display: grid;
+  place-content: center;
+  width: 20px;
+  height: 20px;
+  border-radius: var(--ak-radius-xs);
+  background: var(--ak-paper-sheet);
+}
+@media (pointer: coarse) {
+  .shell-appearance input:not([type="file"]),
+  .shell-appearance select,
+  .shell-appearance button { min-height: 44px; }
+  .shell-appearance-icons .shell-appearance-icon-delete {
+    width: 44px;
+    height: 44px;
+    inset-block-start: -9px;
+    inset-inline-end: -9px;
+  }
+}
+.shell-appearance-icons .shell-appearance-icon-delete:hover:not(:disabled) { background: transparent; color: var(--ak-color-status-error); }
+.shell-appearance-icon-delete:hover:not(:disabled) > span { background: color-mix(in oklab, var(--ak-ink-primary) 4%, transparent); }
 .shell-appearance-icons .shell-appearance-custom-image,
 .shell-appearance-brand[data-custom-icon] img,
 .product-band__brand img[data-custom-icon] {
